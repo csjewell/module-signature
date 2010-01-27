@@ -18,6 +18,7 @@ use constant CIPHER_UNKNOWN      => -6;
 
 use ExtUtils::Manifest ();
 use Exporter;
+require File::Spec;
 
 @EXPORT_OK      = (
     qw(sign verify),
@@ -131,7 +132,8 @@ sub _verify {
 }
 
 sub _has_gpg {
-    `gpg --version` =~ /GnuPG.*?(\S+)$/m or return;
+    my $nul = File::Spec->devnull();
+    `gpg --version 2>$nul` =~ /GnuPG.*?(\S+)$/m or return;
     return $1;
 }
 
